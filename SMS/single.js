@@ -109,6 +109,13 @@ function createTable()
 	console.log(payment_json);
 	console.log("************** payment_json ******************");
 	startTimer(0);
+	$.ajax({
+		url : 'writedata.php',
+		type : 'post',
+		data : {'servers':servers, 'customers':customers, 'trial':trial_json, 'payment':payment_json},
+		success : function(data){  console.log(data);},
+		error : function(){console.log(" could not write to file");}
+	});
 	displayTable();
 }
 function checkTimer() {

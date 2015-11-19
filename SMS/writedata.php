@@ -1,6 +1,6 @@
 <?php
 	extract($_POST);
-	$handle = fopen("data1.json","w");
+	$handle = fopen("data.json","w");
 	$arr = array(
 		'servers' => $servers,
 		'customers' => $customers,

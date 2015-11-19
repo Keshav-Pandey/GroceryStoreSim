@@ -14,6 +14,7 @@ function create_multiple ()
 	{
 		server_stat.push(0);
 		//create the server images and the divs
+		/*
 		var snum = i+1;
 		var div = document.createElement("div");
 		div.id = "trial_q"+snum;
@@ -28,6 +29,7 @@ function create_multiple ()
 		span.appendChild(text);
 		div.appendChild(span);
 		document.body.insertBefore(div,div1);
+		*/
 	}
 	var lambda = parseFloat(prompt("Please enter lambda (rate parameter) for IAT"));
 	var lambda1 = parseFloat(prompt("Please enter lambda (rate parameter) for ST"));
@@ -61,46 +63,47 @@ function startSimulation ()
 			tse:service[0]+arrivals[0],
 			server:1
 		};
-	server_stat[0]=obj.tse;
+	server_stat[0] = obj.tse;
 	trial_json.push(obj);
-	flag =0;
+	flag = 0;
 	for (var i = 1; i < customers; i++) 
 	{
-		if(arrivals[i]<Math.max(server_stat))
+		if(arrivals[i] < Math.max(server_stat))
 		{
 			s = server_stat.indexOf(Math.min(server_stat));
 			tsb_m=Math.min(server_stat);
 				obj ={
-					id: i+1,
-					atc:arrivals[i],
-					st:service[i],
-					tsb:tsb_m,
-					tse:service[i]+tsb_m,
-					server:s+1
+					id : i+1,
+					atc : arrivals[i],
+					st : service[i],
+					tsb : tsb_m,
+					tse : service[i]+tsb_m,
+					server : s+1
 				};
 				trial_json.push(obj);
 				server_stat[s] = obj.tse;
 		}
 		else
 		{
-		for (var j = 0; j < server_stat.length; j++) 
-		{
-			if(arrivals[i]>=server_stat[j])
+			for (var j = 0; j < server_stat.length; j++) 
 			{
-				tsb_m=arrivals[i];
-				obj ={
-					atc:arrivals[i],
-					st:service[i],
-					tsb:tsb_m,
-					tse:service[i]+arrivals[i],
-					server:j+1
-				};
-				trial_json.push(obj);
-				server_stat[j] = obj.tse;
-				flag=1;
-				break;
+				if(arrivals[i] >= server_stat[j])
+				{
+					tsb_m = arrivals[i];
+					obj = {
+						id : i+1,
+						atc : arrivals[i],
+						st : service[i],
+						tsb : tsb_m,
+						tse : service[i]+arrivals[i],
+						server : j+1
+					};
+					trial_json.push(obj);
+					server_stat[j] = obj.tse;
+					flag = 1;
+					break;
+				}
 			}
-		}
 		}
 	}
 	console.log("************** trial_json ******************");
@@ -110,7 +113,7 @@ function startSimulation ()
 	arrival_idx_trial = 0;
 	service_idx_trial_start = 0;
 	service_idx_trial_end = 0;
-	populateTrialArrivals();
+	// populateTrialArrivals();
 	create_table();
 }
 function create_table () 

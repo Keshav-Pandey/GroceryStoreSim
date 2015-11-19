@@ -37,6 +37,7 @@ function init ()
 			service_payment[i]=1;
 	}
 	// queue for Payment Arrivals
+	/*
 	var padiv = document.createElement("div");
 	padiv.id = "payment_arr";
 	var head = document.createElement("h2");
@@ -59,6 +60,7 @@ function init ()
 	document.body.insertBefore(div,div1);
 	payment_arr = document.getElementById("payment_arr");
 	payment_q = document.getElementById("payment_q");
+	*/
 	createTable();
 }
 function createTable()
@@ -108,7 +110,7 @@ function createTable()
 	console.log("************** payment_json ******************");
 	console.log(payment_json);
 	console.log("************** payment_json ******************");
-	startTimer(0);
+	// startTimer(0);
 	$.ajax({
 		url : 'writedata.php',
 		type : 'post',

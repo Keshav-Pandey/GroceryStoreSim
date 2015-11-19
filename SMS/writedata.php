@@ -9,5 +9,5 @@
 	);
 	fwrite($handle,json_encode($arr));
 	fclose($handle);
-	echo "done";
+	echo "Successfully written simulation data to file";
 ?>

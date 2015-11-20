@@ -15,7 +15,7 @@ function json_sort(obj)
 	}
 	return obj_arr;
 }
-function init () 
+function init() 
 {
 	arrivals_payment = new Array();
 	service_payment = new Array();
@@ -36,31 +36,6 @@ function init ()
 		if(service_payment[i]==0)
 			service_payment[i]=1;
 	}
-	// queue for Payment Arrivals
-	/*
-	var padiv = document.createElement("div");
-	padiv.id = "payment_arr";
-	var head = document.createElement("h2");
-	head.innerHTML = "Payment Arrivals";
-	padiv.appendChild(head);
-	document.body.insertBefore(padiv,div1);
-	// create the div and payment server img - service
-	var div = document.createElement("div");
-	div.id = "payment_q";
-	var span = document.createElement("span");
-	span.id = "spay";
-	var img = document.createElement("img");
-	img.src = "server.png";
-	img.height = "75";
-	img.width = "75";
-	var text = document.createTextNode("Payment Server");
-	span.appendChild(img);
-	span.appendChild(text);
-	div.appendChild(span);
-	document.body.insertBefore(div,div1);
-	payment_arr = document.getElementById("payment_arr");
-	payment_q = document.getElementById("payment_q");
-	*/
 	createTable();
 }
 function createTable()
@@ -123,110 +98,6 @@ function createTable()
 function checkTimer() {
 	return parseInt(document.getElementById('timer').innerHTML);
 }
-function populatePaymentArrivals(cust) 
-{
-	time = checkTimer();
-	//alert(time+" "+arrivals[arrival_idx]);
-	// if(time==payment_json[arrival_idx].atc)
-	// {
-	// 	//Add payment arrival animation
-	// 	//Add trial arrival animation
-	// 	// console.log(trial_json[arrival_idx_trial]['atc']);
-	// 	// create the img
-	// 	var num = arrival_idx+1;
-	// 	var span = document.createElement("span");
-	// 	span.id = "c"+num;
-	// 	var text = document.createTextNode("C"+num);
-	// 	var img = document.createElement("img");
-	// 	img.src = "cust.jpe";
-	// 	img.height = "75";
-	// 	img.width = "75";	
-	// 	span.appendChild(img);
-	// 	span.appendChild(text);
-		var id = cust.id;
-		var ind = parseInt(id.split("c")[1])-1;
-		payment_arr.appendChild(cust);
-		// place it in the correct queue
-
-		populateServicePaymentStart(cust);
-		arrival_idx=arrival_idx+1;
-	// }
-	if(arrival_idx<customers)
-	{
-		pa = setTimeout(populatePaymentArrivals,1000);
-	}
-	 if(arrival_idx == customers)
-	 	populateServicePaymentEnd();
-}
-function populateServicePaymentStart(cust1) 
-{
-	time = checkTimer();
-	var id = cust1.id;
-	var ind = parseInt(id.split("c")[1])-1;
-	// var cust1 = document.getElementById("c"+num);
-	if(time==payment_json[ind].tsb)
-	{
-		//Add payment start animation
-		// service_idx_start+=1;
-		payment_q.appendChild(cust1);
-		// service_idx_trial_start+=1;
-		//alert("Service " + id);
-		populateServicePaymentEnd(cust1);
-	}
-	else
-	{
-		pss = setTimeout(function(){populateServicePaymentStart(cust1);},1000);
-	}	
-	
-}
-function populateServicePaymentEnd (cust_end) 
-{
-	time = checkTimer();
-	if(arrival_idx == customers)
-	{
-		alert("Finished Simulation");
-		clearTimeout(t);
-		clearTimeout(pa);
-		clearTimeout(pss);
-		clearTimeout(pse);
-		clearTimeout(ta);
-		clearTimeout(te);
-		clearTimeout(ts);
-		// create_table();
-		// displayTable();
-		//Graph Generation
-		var avg_wt = 0;
-		var avg_Wt = 0;
-		for(var i =0;i<customers;i++)
-		{
-			avg_wt+=trial_json[i].tsb-trial_json[i].atc;
-			avg_Wt+=trial_json[i].tse-trial_json[i].atc;
-		}
-		avg_wt/=customers;
-		avg_Wt/=customers;
-		if(localStorage.values)
-			localStorage.values = localStorage.values + servers + ":" + avg_wt + "," + avg_Wt + ";";
-		else
-			localStorage.values = servers + ":" + avg_wt + "," + avg_Wt + ";";
-		drawChart();
-		alert("Chart Generated");
-	}
-	else {
-		var id = cust_end.id;
-		var ind = parseInt(id.split("c")[1])-1;
-		if(time==payment_json[ind].tse)
-	{
-		//Add payment end animation
-		// service_idx_end+=1;
-		payment_q.removeChild(cust_end);
-	}
-	
-	if(time != payment_json[ind].tse && arrival_idx < customers)
-	{
-		pse = setTimeout(function(){populateServicePaymentEnd(cust_end);},1000);
-	}
-	}
-}
 function displayTable()
 {
 	div2 = document.getElementById("div2");
@@ -286,40 +157,4 @@ function displayTable()
 		tab.appendChild(tr);
 	}
 	div2.appendChild(tab);
-	//document.body.appendChild(div2);
-	// arrival_idx=0;
-	// service_idx_end=0;
-	// service_idx_start=0;
-	// populatePaymentArrivals();
-	// populateServicePaymentStart();
-	// populateServicePaymentEnd();
-	// startTimer(0);
-}
-function startTimer()
-{
-
-	timer = document.getElementById('timer');
-	if (arguments[0]==0)
-		timer.innerHTML = 0;
-	else
-		timer.innerHTML = parseInt(timer.innerHTML)+1;
-
-	t = setTimeout(startTimer,1000);
-}
-function resetTimer () 
-{
-	clearTimeout(t);
-	clearTimeout(pa);
-	clearTimeout(pss);
-	clearTimeout(pse);
-	clearTimeout(ta);
-	clearTimeout(te);
-	clearTimeout(ts);
-
-	div1.innerHTML="";
-	div2.innerHTML="";
-	timer.innerHTML = 0;
-	create_multiple();
-	startTimer(0);
-
 }

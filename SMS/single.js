@@ -1,9 +1,9 @@
 function json_sort(obj)
 {
 	var obj_arr = obj;
-	for(var i=0;i<obj_arr.length;i++)
+	for(var i=0;i<obj_arr.length-1;i++)
 	{
-		for(var j=i;j<obj_arr.length-1;j++)
+		for(var j=0;j<obj_arr.length;j++)
 		{
 			if(obj_arr[j].tse > obj_arr[j+1].tse)
 			{
@@ -20,7 +20,10 @@ function init()
 	arrivals_payment = new Array();
 	service_payment = new Array();
 	id_arr = new Array();
-	new_json = json_sort(trial_json);
+	//new_json = json_sort(trial_json);
+	new_json = trial_json.sort(function(a,b){
+		return (a.tse-b.tse);
+	});
 	console.log("********* new json ********");
 	console.log(new_json);
 	console.log("********* new json ********");
@@ -134,7 +137,7 @@ function displayTable()
 	{
 		tr = document.createElement("tr");
 		td0=document.createElement("td");
-		td0.innerHTML= i+1;
+		td0.innerHTML= payment_json[i].id;
 		td1=document.createElement("td");
 		td1.innerHTML=payment_json[i].atc;
 		td2=document.createElement("td");
@@ -157,4 +160,19 @@ function displayTable()
 		tab.appendChild(tr);
 	}
 	div2.appendChild(tab);
+	var avg_wt = 0;
+	var avg_Wt = 0;
+		for(var i =0;i<customers;i++)
+		{
+			avg_wt+=trial_json[i].tsb-trial_json[i].atc;
+			avg_Wt+=trial_json[i].tse-trial_json[i].atc;
+		}
+		avg_wt/=customers;
+		avg_Wt/=customers;
+		if(localStorage.values)
+			localStorage.values = localStorage.values + servers + ":" + avg_wt + "," + avg_Wt + ";";
+		else
+			localStorage.values = servers + ":" + avg_wt + "," + avg_Wt + ";";
+		drawChart();
+		alert("Chart Generated");
 }

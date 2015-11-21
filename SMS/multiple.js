@@ -16,23 +16,27 @@ function create_multiple()
 	}
 	var lambda = parseFloat(prompt("Please enter lambda (rate parameter) for IAT"));
 	var lambda1 = parseFloat(prompt("Please enter lambda (rate parameter) for ST"));
+	trial_json = new Array();
 	for (var i = 0; i < customers; i++)
 	{
-	    n = Math.random();
+	    var n = Math.random();
 	    var x = Math.log(1 - n) / (lambda * -1);
 	    var y = Math.log(1 - n) / (lambda1 * -1);
+	    //alert(x+" "+y);
 		if(i==0)
 			arrivals.push(Math.floor(x));
 		else
-		    arrivals.push(arrivals[i - 1] + Math.floor(x));
+		{
+		    	arrivals.push(arrivals[i-1] + Math.floor(x));
+		}
 		service.push(Math.ceil(y));
 	}
-	trial_json = new Array();
+	
 	startSimulation();
 }
 function startSimulation() 
 {
-	obj = {
+	var trial_obj = {
 			id : 1,
 			atc:arrivals[0],
 			st:service[0],
@@ -40,57 +44,46 @@ function startSimulation()
 			tse:service[0]+arrivals[0],
 			server:1
 		};
-	server_stat[0] = obj.tse;
-	trial_json.push(obj);
+	server_stat[0] = trial_obj.tse;
+	trial_json.push(trial_obj);
 	flag = 0;
-	for (var i = 1; i < customers; i++) 
+	for (var i1 = 1; i1 < customers; i1++) 
 	{
-		if(arrivals[i] < Math.max(server_stat))
+		var s = server_stat.indexOf(Math.min.apply(Math,server_stat));
+		var tsb_m=Math.min.apply(Math,server_stat);
+		if(arrivals[i1] >= tsb_m)
 		{
-			s = server_stat.indexOf(Math.min(server_stat));
-			tsb_m=Math.min(server_stat);
-				obj ={
-					id : i+1,
-					atc : arrivals[i],
-					st : service[i],
-					tsb : tsb_m,
-					tse : service[i]+tsb_m,
-					server : s+1
-				};
-				trial_json.push(obj);
-				server_stat[s] = obj.tse;
+			var trial_obj ={
+				id : i1+1,
+				atc : arrivals[i1],
+				st : service[i1],
+				tsb : arrivals[i1],
+				tse : (service[i1]+arrivals[i1]),
+				server : (s+1)
+			};
+			trial_json.push(trial_obj);
+			server_stat[s] = trial_obj.tse;
 		}
 		else
 		{
-			for (var j = 0; j < server_stat.length; j++) 
-			{
-				if(arrivals[i] >= server_stat[j])
-				{
-					tsb_m = arrivals[i];
-					obj = {
-						id : i+1,
-						atc : arrivals[i],
-						st : service[i],
-						tsb : tsb_m,
-						tse : service[i]+arrivals[i],
-						server : j+1
-					};
-					trial_json.push(obj);
-					server_stat[j] = obj.tse;
-					flag = 1;
-					break;
-				}
-			}
+			var trial_obj ={
+				id : (i1+1),
+				atc : arrivals[i1],
+				st : service[i1],
+				tsb : tsb_m,
+				tse : (service[i1]+tsb_m),
+				server : (s+1)
+			};
+			trial_json.push(trial_obj);
+			server_stat[s] = trial_obj.tse;
 		}
+
 	}
 	console.log("************** trial_json ******************");
 	console.log(trial_json);
 	console.log("************** trial_json ******************");
-	init();
-	arrival_idx_trial = 0;
-	service_idx_trial_start = 0;
-	service_idx_trial_end = 0;
 	create_table();
+	init();
 }
 function create_table() 
 {
@@ -127,7 +120,7 @@ function create_table()
 	{
 		tr = document.createElement("tr");
 		td0=document.createElement("td");
-		td0.innerHTML= i+1;
+		td0.innerHTML= trial_json[i].id;
 		td1=document.createElement("td");
 		td1.innerHTML=trial_json[i].atc;
 		td2=document.createElement("td");

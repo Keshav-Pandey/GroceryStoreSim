@@ -103,6 +103,7 @@ function animate()
 	{
 		clearTimeout(t);
 		alert("Finished Simulation");
+		
 	}
 	
 }
@@ -121,7 +122,7 @@ function populateBillingArrivals()
 {
 	for(var i=0; i< trial_json.length;i++)
 	{
-		if(timer == trial_json[i].atc)
+		if(timer == parseInt(trial_json[i].atc))
 		{
 			// create the customer img and add to arrival queue
 			var num = trial_json[i].id;
@@ -143,12 +144,12 @@ function beginBilling()
 {
 	for(var i=0; i< trial_json.length;i++)
 	{
-		if(timer == trial_json[i].tsb)
+		if(timer == parseInt(trial_json[i].tsb))
 		{
 			// service the appropriate customer
 			var cust_id = trial_json[i].id;
 			var cust = document.getElementById("c"+cust_id);
-			trial_q[parseInt(trial_json[i].server)].appendChild(cust);
+			trial_q[parseInt(trial_json[i].server)-1].appendChild(cust);
 		}
 	}
 }
@@ -157,12 +158,12 @@ function endBilling()
 {
 	for(var i=0; i< trial_json.length;i++)
 	{
-		if(timer == trial_json[i].tse)
+		if(timer == parseInt(trial_json[i].tse))
 		{
 			// service the appropriate customer
 			var cust_id = trial_json[i].id;
 			var cust = document.getElementById("c"+cust_id);
-			trial_q[parseInt(trial_json[i].server)].removeChild(cust);
+			trial_q[parseInt(trial_json[i].server)-1].removeChild(cust);
 		}
 	}
 }
@@ -171,7 +172,7 @@ function populatePaymentArrivals()
 {
 	for(var i=0; i< payment_json.length;i++)
 	{
-		if(timer == payment_json[i].atc)
+		if(timer == parseInt(payment_json[i].atc))
 		{
 			// create the customer img and add to arrival queue
 			var num = payment_json[i].id;
@@ -193,7 +194,7 @@ function beginPayment()
 {
 	for(var i=0; i< payment_json.length;i++)
 	{
-		if(timer == payment_json[i].tsb)
+		if(timer == parseInt(payment_json[i].tsb))
 		{
 			// service the appropriate customer
 			var cust_id = payment_json[i].id;
@@ -207,7 +208,7 @@ function endPayment()
 {
 	for(var i=0; i< payment_json.length;i++)
 	{
-		if(timer == payment_json[i].tse)
+		if(timer == parseInt(payment_json[i].tse))
 		{
 			// service the appropriate customer
 			var cust_id = payment_json[i].id;
@@ -215,6 +216,7 @@ function endPayment()
 			payment_q.removeChild(cust);
 		}
 	}
+	// t = setTimeout(animate,timeout);
 }
 
 function resetTimer () 

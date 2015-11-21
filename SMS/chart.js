@@ -1,4 +1,4 @@
-function drawChart() {alert(localStorage.values);
+function drawChart() {
         var test = Array();
         test[0]= ['Servers', 'Average Waiting Time' , 'Average Time Spent'];
         if(localStorage.values!="")
